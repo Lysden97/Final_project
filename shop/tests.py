@@ -5,7 +5,7 @@ from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
 from shop.forms import AddCommentForm
-from shop.models import Comment, CartProduct, Cart
+from shop.models import Comment, CartProduct, Cart, Order
 
 
 def test_base_view():
@@ -243,5 +243,63 @@ def test_show_cart_view_logged_in(user):
 def test_show_cart_not_logged_in():
     client = Client()
     response = client.get(reverse('cart'))
+    assert response.status_code == 302
+    assert 'login' in response.url
+
+@pytest.mark.django_db
+def test_create_order(cart):
+    url = reverse('create_order')
+    client = Client()
+    client.force_login(cart.user)
+    product_count = cart.products.count()
+    response = client.post(url)
+    assert response.status_code == 302
+    redirect_url = reverse('order_list')
+    assert response.url == redirect_url
+    o = Order.objects.get(user=cart.user)
+    assert o.products.count() == product_count
+
+@pytest.mark.django_db
+def test_create_order_not_logged_in(cart):
+    url = reverse('create_order')
+    client = Client()
+    response = client.post(url)
+    login = reverse('login')
+    redirect_url = f"{login}?next={url}"
+    assert response.status_code == 302
+    assert response.url == redirect_url
+
+@pytest.mark.django_db
+def test_order_list_logged_in(user, create_order):
+    client = Client()
+    client.force_login(user)
+    response = client.get(reverse('order_list'))
+    assert response.status_code == 200
+    orders = response.context['object_list']
+    assert len(orders) == 1
+    assert orders[0].user == user
+
+@pytest.mark.django_db
+def test_order_list_not_logged_in():
+    client = Client()
+    response = client.get(reverse('order_list'))
+    assert response.status_code == 302
+    assert 'login' in response.url
+
+
+@pytest.mark.django_db
+def test_order_detail_logged_in(user, create_order):
+    client = Client()
+    client.force_login(user)
+    order = create_order
+    response = client.get(reverse('order_detail', args=(order.pk,)))
+    assert response.status_code == 200
+    assert response.context['object'] == order
+
+@pytest.mark.django_db
+def test_order_detail_not_logged_in(create_order):
+    client = Client()
+    order = create_order
+    response = client.get(reverse('order_detail', args=(order.pk,)))
     assert response.status_code == 302
     assert 'login' in response.url

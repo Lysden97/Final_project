@@ -5,7 +5,7 @@
     <div class="product-container">
         <h1>{{ product.name }}</h1>
         <p class="product-brand">{{ product.brand }}</p>
-        <p class="product-price"><strong>Price:</strong> {{ product.price }}</p>
+        <p class="product-price"><strong>Price:</strong> ${{ product.price }}</p>
         <p class="product-for-whom">{{ product.get_for_whom_display }}</p>
         <p class="product-description"><strong>Product description:</strong> {{ product.description }}</p>
         <form method="POST" action="{% url 'add_to_cart' product.pk %}">

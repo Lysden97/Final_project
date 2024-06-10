@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth.models import User
 
-from shop.models import Brand, Product, Comment
+from shop.models import Brand, Product, Comment, Cart, CartProduct, Order
 
 
 @pytest.fixture
@@ -45,3 +45,14 @@ def comments(products, user):
     for i in range(5):
         lst.append(Comment.objects.create(product=products[0], user=user, text='comment', date='2020-01-01'))
     return lst
+
+@pytest.fixture
+def cart(user, products):
+    c = Cart.objects.create(user=user)
+    for product in products:
+        CartProduct.objects.create(cart=c, product=product, quantity=2)
+    return c
+
+@pytest.fixture
+def create_order(user):
+    return Order.objects.create(user=user)

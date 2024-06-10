@@ -29,4 +29,7 @@ urlpatterns = [
     path('delete_comment/<int:pk>', views.DeleteCommentView.as_view(), name='delete_comment'),
     path('add_to_cart/<int:product_pk>', views.AddProductToCartView.as_view(), name='add_to_cart'),
     path('cart/', views.ShowCartView.as_view(), name='cart'),
+    path('create_order/', views.CreateOrderView.as_view(), name='create_order'),
+    path('order_list/', views.OrderListView.as_view(), name='order_list'),
+    path('order_detail/<int:pk>', views.OrderDetailView.as_view(), name='order_detail'),
 ]

@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import CreateView, ListView, DetailView, DeleteView
 
 from shop.forms import AddCommentForm
-from shop.models import Brand, Product, Comment, Cart, CartProduct
+from shop.models import Brand, Product, Comment, Cart, CartProduct, Order, OrderProduct
 
 
 class AddBrandView(PermissionRequiredMixin, CreateView):
@@ -112,3 +112,29 @@ class ShowCartView(LoginRequiredMixin, View):
     def get(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
         return render(request, 'shop/cart.html', {'cart': cart})
+
+
+class CreateOrderView(LoginRequiredMixin, View):
+    def post(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        if created or not cart.cartproduct_set.all():
+            return redirect('cart')
+        order = Order.objects.create(user=request.user)
+        for cart_product in cart.cartproduct_set.all():
+            OrderProduct.objects.create(product=cart_product.product,
+                                        order=order,
+                                        quantity=cart_product.quantity)
+        cart.cartproduct_set.all().delete()
+        return redirect('order_list')
+
+class OrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'shop/order_list.html'
+
+    def get_queryset(self):
+        return Order.objects.filter(user=self.request.user)
+
+class OrderDetailView(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'shop/order_detail.html'
+

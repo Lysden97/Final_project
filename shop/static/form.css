@@ -1,0 +1,56 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #777777, #4a4a4a);
+    padding: 20px;
+}
+
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+input[type="submit"], .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 10px 5px;
+    text-decoration: none;
+}
+
+input[type="submit"].btn-primary, .btn-primary {
+    background-color: #575656;
+    color: white;
+}
+
+input[type="submit"].btn-primary:hover, .btn-primary:hover {
+    background-color: #575656;
+}
+
+input[type="text"], input[type="email"], input[type="password"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}

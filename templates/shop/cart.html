@@ -20,13 +20,13 @@
                     <td>${{ item.total }}</td>
                 </tr>
             {% endfor %}
-            <tr>
-                <td colspan="3"></td>
-                <td>${{ cart.get_total }}</td>
+            <tr class="total-row">
+                <td colspan="3" class="total-label"></td>
+                <td><strong>${{ cart.get_total }}</strong></td>
             </tr>
         </tbody>
     </table>
-    <form method="POST" action="">
+    <form method="POST" action="{% url 'create_order' %}">
         {% csrf_token %}
         <button type="submit" class="order-btn">Order</button>
     </form>
