@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    <table>
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Price</th>
+        <th>Total</th>
+
+    </tr>
+    {% for item in cart.cartproduct_set.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.product.get_price}}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ cart.get_total }}</td>
+    </tr>
+    </table>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <button type="submit">Order</button>
+    </form>
+{% endblock %}

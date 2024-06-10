@@ -26,4 +26,7 @@ urlpatterns = [
     path('detail_product/<int:pk>', views.DetailProductView.as_view(), name='detail_product'),
     path('add_comment/<int:product_pk>', views.AddCommentView.as_view(), name='add_comment'),
     path('update_comment/<int:pk>', views.UpdateCommentView.as_view(), name='update_comment'),
+    path('delete_comment/<int:pk>', views.DeleteCommentView.as_view(), name='delete_comment'),
+    path('add_to_cart/<int:product_pk>', views.AddProductToCartView.as_view(), name='add_to_cart'),
+    path('cart/', views.ShowCartView.as_view(), name='cart'),
 ]

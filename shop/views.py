@@ -2,10 +2,10 @@ from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMix
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView
 
 from shop.forms import AddCommentForm
-from shop.models import Brand, Product, Comment
+from shop.models import Brand, Product, Comment, Cart, CartProduct
 
 
 class AddBrandView(PermissionRequiredMixin, CreateView):
@@ -34,6 +34,11 @@ class AddProductView(PermissionRequiredMixin, CreateView):
 class ProductListView(ListView):
     model = Product
     template_name = 'shop/product_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['product_list'] = Product.objects.all()
+        return context
 
 
 class DetailProductView(DetailView):
@@ -76,3 +81,34 @@ class UpdateCommentView(UserPassesTestMixin, View):
             form.save()
             return redirect('detail_product', comment.product.pk)
         return render(request, 'shop/form.html', {'form': form})
+
+
+class DeleteCommentView(UserPassesTestMixin, DeleteView):
+    model = Comment
+    template_name = 'shop/delete_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('detail_product', args=(self.object.product.pk,))
+
+    def test_func(self):
+        comment = self.get_object()
+        return self.request.user == comment.user
+
+
+class AddProductToCartView(LoginRequiredMixin, View):
+    def post(self, request, product_pk):
+        product = Product.objects.get(pk=product_pk)
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        try:
+            cartItem = CartProduct.objects.get(product=product, cart=cart)
+            cartItem.quantity += 1
+            cartItem.save()
+        except CartProduct.DoesNotExist:
+            cart.products.add(product)
+        return redirect('products_list')
+
+
+class ShowCartView(LoginRequiredMixin, View):
+    def get(self, request):
+        cart, created = Cart.objects.get_or_create(user=request.user)
+        return render(request, 'shop/cart.html', {'cart': cart})
