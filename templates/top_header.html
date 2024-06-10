@@ -1,7 +1,26 @@
-{% if user.is_authenticated %}
-    User: {{ user }}
-    <a href="{% url 'logout' %}">Logout</a>
-{% else %}
-    <a href="{% url 'register' %}">Register</a>
-    <a href="{% url 'login' %}">Login</a>
-{% endif %}
+<body>
+<nav>
+    <div class="navbar">
+        <div class="container nav-container">
+            <input class="checkbox" type="checkbox" name="" id=""/>
+            <div class="hamburger-lines">
+                <span class="line line1"></span>
+                <span class="line line2"></span>
+                <span class="line line3"></span>
+            </div>
+            <div class="logo">
+                <h1>Test</h1>
+            </div>
+            <div class="menu-items">
+                {% if user.is_authenticated %}
+                    User: {{ user }}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'register' %}">Register</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>
+</body>

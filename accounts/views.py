@@ -13,10 +13,13 @@ class CreateUserView(View):
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
         if password != "" and password == password2:
-            u = User(username=username)
-            u.set_password(password)
-            u.save()
-            return redirect('base')
+            if User.objects.filter(username=username).exists():
+                return render(request, 'accounts/create_user.html', {"error": "Username already exists"})
+            else:
+                u = User(username=username)
+                u.set_password(password)
+                u.save()
+                return redirect('base')
         return render(request, 'accounts/create_user.html', {"error": "Passwords do not match"})
 
 
