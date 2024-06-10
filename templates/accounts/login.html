@@ -1,10 +1,17 @@
-{% extends 'base.html' %}
-{% block content %}
-    <ul><h2>Login</h2></ul>
+
+    {% load static %}
+<link type="text/css" href="{% static 'login.css' %}" rel="stylesheet">
+<body>
+<div class="main">
     <form method="POST">
-        {% csrf_token %}
-        <ul><input type="text" name="username" placeholder="Username"></ul>
-        <ul><input type="password" name="password" placeholder="Password"></ul>
-        <ul><button type="submit">Login</button></ul><
+        <input type="checkbox" id="chk" aria-hidden="true">
+        <div class="signup">
+            <label for="chk" aria-hidden="true">Login</label>
+            <input type="text" name="username" placeholder="Username" required="">
+            <input type="password" name="password" placeholder="Password" required="">
+            {% csrf_token %}
+            <button type="submit">Login</button>
+            </div>
     </form>
-{% endblock %}
+</div>
+</body>

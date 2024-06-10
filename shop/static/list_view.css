@@ -1,0 +1,21 @@
+.list-group {
+        margin: 0 auto;
+        width: 80%;
+        list-style: none; /* usuwanie domyślnych punktów listy */
+        padding: 0;
+    }
+
+    .list-group-item {
+        background-color: #f2f2f2;
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd; /* dodanie linii oddzielającej między elementami listy */
+    }
+
+    .list-group-item:last-child {
+        border-bottom: none; /* usuwanie linii oddzielającej dla ostatniego elementu listy */
+    }
+
+    .list-group-item:hover {
+        background-color: #ddd;
+    }

@@ -1,13 +1,27 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    <h1>Products</h1>
-    {% for product in product_list %}
-        <li class="list-group-item">
-            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
-            <form method="POST" action="{% url 'add_to_cart' product.pk %}">
-                {% csrf_token %}
-                <button type="submit">Add to cart</button>
-            </form>
-        </li>
-    {% endfor %}
+    <link rel="stylesheet" type="text/css" href="{% static 'product_list.css' %}">
+    <table class="product-list">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for product in product_list %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>
+                <a href="{{ product.get_absolute_url }}" class="info-btn">Info</a>
+                <form method="POST" action="{% url 'add_to_cart' product.pk %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="action-btn">Add to cart</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

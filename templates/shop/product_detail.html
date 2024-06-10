@@ -1,32 +1,43 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    <h1>{{ product.name }}</h1>
-    <p><em>{{ product.brand }}</em></p>
-    <p><strong>Price:</strong></p>
-    <p><em>{{ product.price }}</em></p>
-    <p><em>{{ product.get_for_whom_display }}</em></p>
-    <p><strong>Product description:</strong></p>
-    <p><em>{{ product.description }}</em></p>
-    <form method="POST" action="{% url 'add_to_cart' product.pk %}">
-        {% csrf_token %}
-        <button type="submit">Add to cart</button>
-    </form>
-    <ul>
-        {% for comment in product.comment_set.all %}
-            <li>{{ comment.text }} -- <small>{{ comment.user }}</small>
-            {% if comment.user == user %}
-            <a href="{% url 'update_comment' comment.pk %}">Update</a>
-            <a href="{% url 'delete_comment' comment.pk %}">Delete</a>
-            {% endif %}
+    <link rel="stylesheet" type="text/css" href="{% static 'product_detail.css' %}">
+    <div class="product-container">
+        <h1>{{ product.name }}</h1>
+        <p class="product-brand">{{ product.brand }}</p>
+        <p class="product-price"><strong>Price:</strong> {{ product.price }}</p>
+        <p class="product-for-whom">{{ product.get_for_whom_display }}</p>
+        <p class="product-description"><strong>Product description:</strong> {{ product.description }}</p>
+        <form method="POST" action="{% url 'add_to_cart' product.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn">Add to cart</button>
+        </form>
+    </div>
 
+    <ul class="comment-list">
+        {% for comment in product.comment_set.all %}
+            <li class="comment-item">
+                {{ comment.text }} <small>{{ comment.user }}</small>
+                {% if comment.user == user %}
+                    <div class="comment-actions">
+                        <form method="GET" action="{% url 'update_comment' comment.pk %}">
+                            <button type="submit" class="btn btn-small">Update</button>
+                        </form>
+                        <form method="POST" action="{% url 'delete_comment' comment.pk %}">
+                            {% csrf_token %}
+                            <a href="{% url 'delete_comment' comment.pk %}" class="btn btn-small btn-danger">Delete</a>
+                        </form>
+                    </div>
+                {% endif %}
             </li>
         {% endfor %}
     </ul>
+
     {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'add_comment' product.pk %}">
+        <form method="POST" action="{% url 'add_comment' product.pk %}" class="comment-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type="submit">Add comment</button>
+            <button type="submit" class="btn">Add comment</button>
         </form>
     {% endif %}
 {% endblock %}

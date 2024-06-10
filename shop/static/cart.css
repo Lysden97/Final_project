@@ -1,0 +1,44 @@
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+    width: 80%;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+th, td {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* Dodanie linii oddzielających wiersze */
+}
+
+th {
+    background-color: #f2f2f2;
+    border-top: 2px solid #c8c7c7; /* Dodanie linii na górze nagłówków */
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tr:hover {
+    background-color: #f2f2f2;
+}
+
+.order-btn {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 24px; /* Zwiększenie odstępów wewnątrz przycisku */
+    font-size: 18px; /* Zwiększenie rozmiaru czcionki */
+    background-color: #575656;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s; /* Dodanie płynnego przejścia */
+}
+
+.order-btn:hover {
+    background-color: #45a049;
+}

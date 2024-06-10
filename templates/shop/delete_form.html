@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-    <h1>Are you sure you want to delete {{ object.text }}?</h1>
-    <form method="POST">
-        {% csrf_token %}
-        <input type="submit" value="Yes">
-        <button type="button" onclick='window.history.back()'>No</button>
-    </form>
-
+    <link rel="stylesheet" type="text/css" href="{% static 'delete_form.css' %}">
+    <div class="delete-confirmation-container">
+        <h1>Are you sure you want to delete: "{{ object.text }}"?</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <input type="submit" value="Yes" class="btn btn-danger">
+            <button type="button" class="btn btn-secondary" onclick="window.history.back()">No</button>
+        </form>
+    </div>
 {% endblock %}

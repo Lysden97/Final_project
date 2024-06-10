@@ -1,0 +1,135 @@
+body {
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to bottom, #ffffff, #777777, #4a4a4a);
+    padding: 20px;
+}
+
+.product-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.product-container h1 {
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.product-container p {
+    font-size: 1.2em;
+    margin: 10px 0;
+}
+
+.product-brand, .product-price, .product-for-whom, .product-description {
+    display: block;
+    color: #555;
+}
+
+.product-description {
+    margin-top: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #575656;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin: 10px 5px;
+    text-decoration: none;
+}
+
+.btn:hover {
+    background-color: #575656;
+}
+
+.comment-list {
+    max-width: 800px;
+    margin: 20px auto;
+    list-style: none;
+    padding: 0;
+}
+
+.comment-item {
+    background: #f9f9f9;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.comment-item small {
+    display: block;
+    font-size: 0.9em;
+    color: #888;
+    margin-top: 10px;
+}
+
+.comment-actions {
+    margin-top: 10px;
+}
+
+.comment-actions form {
+    display: inline;
+}
+
+.btn-small {
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #575656;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-small:hover {
+    background-color: #575656;
+}
+
+.btn-danger {
+    background-color: #f44336;
+}
+
+.btn-danger:hover {
+    background-color: #e53935;
+}
+
+.comment-form {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.comment-form button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #575656;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.comment-form button:hover {
+    background-color: #575656;
+}
+
+.logo {
+    max-width: 150px;
+    height: auto;
+}
