@@ -1,5 +1,5 @@
 """
-URL configuration for Final_project project.
+URL configuration for KsiegarniaS18 project.
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.0/topics/http/urls/
@@ -14,13 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from django.views.generic import TemplateView
+
+from django.urls import path
+from shop import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', TemplateView.as_view(template_name='base.html'), name='base'),
-    path('accounts/', include('accounts.urls')),
-    path('shop/', include('shop.urls')),
+    path('add_brand/', views.AddBrand.as_view(), name='add_brand'),
+    path('brands_list', views.BrandsList.as_view(), name='brands_list'),
 ]
