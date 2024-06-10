@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{{ product.name }}</h1>
+    <p><em>{{ product.brand }}</em></p>
+    <p><strong>Price:</strong></p>
+    <p><em>{{ product.price }}</em></p>
+    <p><em>{{ product.get_for_whom_display }}</em></p>
+    <p><strong>Product description:</strong></p>
+    <p><em>{{ product.description }}</em></p>
+    <form method="post" action="">
+        {% csrf_token %}
+        <button type="submit">Add to cart</button>
+    </form>
+    <a href="">Cart</a>
+
+    <ul>
+        {% for comment in product.comment_set.all %}
+            <li>{{ comment.text }} -- <small>{{ comment.user }}</small>
+            {% if comment.user == user %}
+            <a href="{% url 'update_comment' comment.pk %}">Update</a>
+            {% endif %}
+
+            </li>
+        {% endfor %}
+    </ul>
+    {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'add_comment' product.pk %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Add comment</button>
+        </form>
+    {% endif %}
+{% endblock %}

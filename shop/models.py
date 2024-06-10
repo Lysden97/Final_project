@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 
 class Brand(models.Model):
@@ -21,8 +22,14 @@ class Product(models.Model):
     for_whom = models.IntegerField(choices=CHOICES, default=1)
     description = models.TextField()
 
+    def get_absolute_url(self):
+        return reverse('detail_product', args= (self.pk,))
+
+    def get_price(self):
+        return f"{self.price:.2f}"
+
     def __str__(self):
-        return f'{self.name} {self.brand} {self.price} {self.for_whom} {self.description}'
+        return f'{self.name} {self.brand} {self.price} {self.for_whom, 'Unknown'} {self.description}'
 
 
 
@@ -31,6 +38,12 @@ class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+
+    def get_absolute_url(self):
+        return reverse('update_comment', args=(self.pk,))
+
+    def __str__(self):
+        return f'{self.product} {self.user} {self.text} {self.date}'
 
 
 class Cart(models.Model):

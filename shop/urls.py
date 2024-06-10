@@ -19,6 +19,11 @@ from django.urls import path
 from shop import views
 
 urlpatterns = [
-    path('add_brand/', views.AddBrand.as_view(), name='add_brand'),
-    path('brands_list', views.BrandsList.as_view(), name='brands_list'),
+    path('add_brand/', views.AddBrandView.as_view(), name='add_brand'),
+    path('brands_list', views.BrandsListView.as_view(), name='brands_list'),
+    path('add_product/', views.AddProductView.as_view(), name='add_product'),
+    path('products_list/', views.ProductListView.as_view(), name='products_list'),
+    path('detail_product/<int:pk>', views.DetailProductView.as_view(), name='detail_product'),
+    path('add_comment/<int:product_pk>', views.AddCommentView.as_view(), name='add_comment'),
+    path('update_comment/<int:pk>', views.UpdateCommentView.as_view(), name='update_comment'),
 ]
