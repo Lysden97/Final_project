@@ -205,3 +205,7 @@ class ProductSearchView(ListView):
             return Product.objects.filter(name__icontains=query)
         else:
             return Product.objects.none()
+
+class BaseView(View):
+    def get(self, request):
+        return render(request,'base.html')

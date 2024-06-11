@@ -20,6 +20,7 @@ from shop import views
 from shop.views import ProductSearchView
 
 urlpatterns = [
+    path('', views.BaseView.as_view(), name='base'),
     path('add_brand/', views.AddBrandView.as_view(), name='add_brand'),
     path('brands_list', views.BrandsListView.as_view(), name='brands_list'),
     path('update_brand/<int:pk>/', views.UpdateBrandView.as_view(), name='update_brand'),
