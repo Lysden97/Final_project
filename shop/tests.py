@@ -1,4 +1,3 @@
-from django.test import TestCase
 import pytest
 from django.test import Client
 from django.urls import reverse
@@ -197,6 +196,7 @@ def test_delete_comment_owner(user, comments):
     assert response.status_code == 302
     assert not Comment.objects.filter(pk=comments[0].pk).exists()
 
+
 @pytest.mark.django_db
 def test_delete_comment_not_owner(other_user, comments):
     url = reverse('delete_comment', args=(comments[0].pk,))
@@ -205,6 +205,7 @@ def test_delete_comment_not_owner(other_user, comments):
     response = client.get(url)
     assert response.status_code == 403
     assert Comment.objects.filter(pk=comments[0].pk).exists()
+
 
 @pytest.mark.django_db
 def test_add_to_cart(products, user):
@@ -217,6 +218,7 @@ def test_add_to_cart(products, user):
     assert response.url == redirect_url
     assert CartProduct.objects.get(product=products[0], quantity=1)
 
+
 @pytest.mark.django_db
 def test_add_to_cart_not_logged_in(products):
     url = reverse('add_to_cart', args=(products[0].pk,))
@@ -227,6 +229,7 @@ def test_add_to_cart_not_logged_in(products):
     assert response.status_code == 302
     assert response.url == redirect_url
     assert not CartProduct.objects.filter(pk=products[0].pk).exists()
+
 
 @pytest.mark.django_db
 def test_show_cart_view_logged_in(user):
@@ -239,12 +242,14 @@ def test_show_cart_view_logged_in(user):
     assert 'cart' in response.context
     assert response.context['cart'] == cart
 
+
 @pytest.mark.django_db
 def test_show_cart_not_logged_in():
     client = Client()
     response = client.get(reverse('cart'))
     assert response.status_code == 302
     assert 'login' in response.url
+
 
 @pytest.mark.django_db
 def test_create_order(cart):
@@ -259,6 +264,7 @@ def test_create_order(cart):
     o = Order.objects.get(user=cart.user)
     assert o.products.count() == product_count
 
+
 @pytest.mark.django_db
 def test_create_order_not_logged_in(cart):
     url = reverse('create_order')
@@ -269,6 +275,7 @@ def test_create_order_not_logged_in(cart):
     assert response.status_code == 302
     assert response.url == redirect_url
 
+
 @pytest.mark.django_db
 def test_order_list_logged_in(user, create_order):
     client = Client()
@@ -278,6 +285,7 @@ def test_order_list_logged_in(user, create_order):
     orders = response.context['object_list']
     assert len(orders) == 1
     assert orders[0].user == user
+
 
 @pytest.mark.django_db
 def test_order_list_not_logged_in():
@@ -296,6 +304,7 @@ def test_order_detail_logged_in(user, create_order):
     assert response.status_code == 200
     assert response.context['object'] == order
 
+
 @pytest.mark.django_db
 def test_order_detail_not_logged_in(create_order):
     client = Client()
@@ -303,3 +312,22 @@ def test_order_detail_not_logged_in(create_order):
     response = client.get(reverse('order_detail', args=(order.pk,)))
     assert response.status_code == 302
     assert 'login' in response.url
+
+
+@pytest.mark.django_db
+def test_product_search_view_with_query(create_product):
+    client = Client()
+    response = client.get(reverse('product_search'), {'q': create_product.name})
+    assert response.status_code == 200
+    assert 'products' in response.context
+    assert len(response.context['products']) == 1
+    assert response.context['products'][0].name == 'Laptop'
+
+
+@pytest.mark.django_db
+def test_product_search_view_without_query():
+    client = Client()
+    response = client.get(reverse('product_search'))
+    assert response.status_code == 200
+    assert 'products' in response.context
+    assert len(response.context['products']) == 0

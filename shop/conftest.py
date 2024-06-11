@@ -16,6 +16,7 @@ def brands():
 def user():
     return User.objects.create_user(username='user')
 
+
 @pytest.fixture
 def other_user():
     return User.objects.create_user(username='other_user')
@@ -46,6 +47,7 @@ def comments(products, user):
         lst.append(Comment.objects.create(product=products[0], user=user, text='comment', date='2020-01-01'))
     return lst
 
+
 @pytest.fixture
 def cart(user, products):
     c = Cart.objects.create(user=user)
@@ -53,6 +55,15 @@ def cart(user, products):
         CartProduct.objects.create(cart=c, product=product, quantity=2)
     return c
 
+
 @pytest.fixture
 def create_order(user):
     return Order.objects.create(user=user)
+
+
+@pytest.fixture
+def create_product(brand):
+    return Product.objects.create(
+        name='Laptop', brand=brand, price=1000,
+        for_whom=1, description='A high-quality laptop'
+    )

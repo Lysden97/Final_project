@@ -17,6 +17,7 @@ Including another URLconf
 
 from django.urls import path
 from shop import views
+from shop.views import ProductSearchView
 
 urlpatterns = [
     path('add_brand/', views.AddBrandView.as_view(), name='add_brand'),
@@ -32,4 +33,5 @@ urlpatterns = [
     path('create_order/', views.CreateOrderView.as_view(), name='create_order'),
     path('order_list/', views.OrderListView.as_view(), name='order_list'),
     path('order_detail/<int:pk>', views.OrderDetailView.as_view(), name='order_detail'),
+    path('product_search/', ProductSearchView.as_view(), name='product_search'),
 ]

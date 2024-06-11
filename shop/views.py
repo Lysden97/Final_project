@@ -138,3 +138,16 @@ class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'shop/order_detail.html'
 
+
+class ProductSearchView(ListView):
+    model = Product
+    template_name = 'shop/product_search.html'
+    context_object_name = 'products'
+    paginate_by = 10
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Product.objects.filter(name__icontains=query)
+        else:
+            return Product.objects.none()
