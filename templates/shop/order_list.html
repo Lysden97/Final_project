@@ -9,6 +9,7 @@
                     <th>Order ID</th>
                     <th>Price</th>
                     <th>Date</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -17,6 +18,14 @@
                         <td><a href="{% url 'order_detail' item.pk %}"> {{ item.id }}</a></td>
                         <td>${{ item.total }}</td>
                         <td>{{ item.date|date:"d-M-Y" }}</td>
+                        <td>
+                            {% if user.is_superuser %}
+                            <form method="POST" action="{% url 'delete_order' item.pk %}" style="display: inline">
+                                {% csrf_token %}
+                                <button type="submit" class="delete-button">Delete</button> 
+                            </form>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

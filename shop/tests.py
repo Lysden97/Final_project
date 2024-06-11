@@ -4,7 +4,7 @@ from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
 
 from shop.forms import AddCommentForm
-from shop.models import Comment, CartProduct, Cart, Order
+from shop.models import Comment, CartProduct, Cart, Order, Brand, Product
 
 
 def test_base_view():
@@ -331,3 +331,124 @@ def test_product_search_view_without_query():
     assert response.status_code == 200
     assert 'products' in response.context
     assert len(response.context['products']) == 0
+
+
+@pytest.mark.django_db
+def test_update_brand_get(superuser, brand):
+    url = reverse('update_brand', args=(brand.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(url)
+    assert response.status_code == 200
+    assert 'form' in response.context
+    form = response.context['form']
+    assert form.instance == brand
+
+
+@pytest.mark.django_db
+def test_update_brand_post(superuser, brand):
+    url = reverse('update_brand', args=(brand.pk,))
+    client = Client()
+    client.force_login(superuser)
+    data = {
+        'name': 'Updated'
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+    assert response.url == reverse('brands_list')
+    brand.refresh_from_db()
+    assert brand.name == 'Updated'
+
+
+@pytest.mark.django_db
+def test_delete_brand_get(superuser, brand):
+    url = reverse('delete_brand', args=(brand.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(url)
+    assert response.status_code == 200
+    assert any(template.name == 'shop/delete_form.html' for template in response.templates)
+
+
+@pytest.mark.django_db
+def test_delete_brand_post(superuser, brand):
+    url = reverse('delete_brand', args=(brand.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.post(url)
+    assert response.status_code == 302
+    assert response.url == reverse('brands_list')
+    assert not Brand.objects.filter(pk=brand.pk).exists()
+
+
+@pytest.mark.django_db
+def test_update_product_get(superuser, create_product):
+    url = reverse('update_product', args=(create_product.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(url)
+    assert response.status_code == 200
+    assert 'form' in response.context
+    form = response.context['form']
+    assert form.instance == create_product
+
+
+@pytest.mark.django_db
+def test_update_product_post(superuser, create_product):
+    url = reverse('update_product', args=(create_product.pk,))
+    client = Client()
+    client.force_login(superuser)
+    data = {
+        'name': 'new_name',
+        'price': 1200,
+        'brand': create_product.brand.pk,
+        'for_whom': create_product.for_whom,
+        'description': create_product.description
+    }
+    response = client.post(url, data)
+    assert response.status_code == 302
+    updated_product = Product.objects.get(pk=create_product.pk)
+    assert updated_product.name == 'new_name'
+    assert updated_product.price == 1200
+
+
+@pytest.mark.django_db
+def test_delete_product_get(superuser, create_product):
+    url = reverse('delete_product', args=(create_product.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(url)
+    assert response.status_code == 200
+    assert any(template.name == 'shop/delete_form.html' for template in response.templates)
+
+
+@pytest.mark.django_db
+def test_delete_product_post(superuser, create_product):
+    url = reverse('delete_product', args=(create_product.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.post(url)
+    assert response.status_code == 302
+    assert response.url == reverse('products_list')
+    assert not Product.objects.filter(pk=create_product.pk).exists()
+
+
+@pytest.mark.django_db
+def test_delete_order_get(superuser, create_order):
+    url = reverse('delete_order', args=(create_order.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.get(url)
+    assert response.status_code == 200
+    assert any(template.name == 'shop/delete_form.html' for template in response.templates)
+
+
+@pytest.mark.django_db
+def test_delete_order_post(superuser, create_order):
+    url = reverse('delete_order', args=(create_order.pk,))
+    client = Client()
+    client.force_login(superuser)
+    response = client.post(url)
+    assert response.status_code == 302
+    assert response.url == reverse('order_list')
+    assert not Order.objects.filter(pk=create_order.pk).exists()

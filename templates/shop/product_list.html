@@ -3,25 +3,32 @@
 {% block content %}
     <link rel="stylesheet" type="text/css" href="{% static 'product_list.css' %}">
     <table class="product-list">
-    <thead>
+        <thead>
         <tr>
             <th>Name</th>
             <th>Actions</th>
         </tr>
-    </thead>
-    <tbody>
+        </thead>
+        <tbody>
         {% for product in product_list %}
-        <tr>
-            <td>{{ product.name }}</td>
-            <td>
-                <a href="{{ product.get_absolute_url }}" class="info-btn">Info</a>
-                <form method="POST" action="{% url 'add_to_cart' product.pk %}" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" class="action-btn">Add to cart</button>
-                </form>
-            </td>
-        </tr>
+            <tr>
+                <td>{{ product.name }}</td>
+                <td>
+                    <a href="{{ product.get_absolute_url }}" class="info-btn">Info</a>
+                    <form method="POST" action="{% url 'add_to_cart' product.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn add-to-cart-btn">Add to cart</button>
+                    </form>
+                    {% if user.is_superuser %}
+                    <a href="{% url 'update_product' product.pk %}" class="action-btn edit-btn">Edit</a>
+                    <form method="POST" action="{% url 'delete_product' product.pk %}" style="display: inline">
+                        {% csrf_token %}
+                        <button type="submit" class="action-btn delete-btn">Delete</button>
+                    </form>
+                    {% endif %}
+                </td>
+            </tr>
         {% endfor %}
-    </tbody>
-</table>
+        </tbody>
+    </table>
 {% endblock %}

@@ -1,8 +1,8 @@
 from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, ListView, DetailView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 
 from shop.forms import AddCommentForm
 from shop.models import Brand, Product, Comment, Cart, CartProduct, Order, OrderProduct
@@ -20,6 +20,28 @@ class AddBrandView(PermissionRequiredMixin, CreateView):
 class BrandsListView(ListView):
     model = Brand
     template_name = 'shop/brand_list.html'
+    context_object_name = 'brands'
+
+class UpdateBrandView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['shop.update_brand']
+
+    model = Brand
+    fields = '__all__'
+    template_name = 'shop/form.html'
+
+    def get_success_url(self):
+        return reverse('brands_list')
+
+
+class DeleteBrandView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['shop.delete_brand']
+
+    model = Brand
+    fields = '__all__'
+    template_name = 'shop/delete_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('brands_list')
 
 
 class AddProductView(PermissionRequiredMixin, CreateView):
@@ -49,6 +71,28 @@ class DetailProductView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = AddCommentForm()
         return context
+
+
+class UpdateProductView(PermissionRequiredMixin, UpdateView):
+    permission_required = ['shop.update_product']
+
+    model = Product
+    fields = '__all__'
+    template_name = 'shop/form.html'
+
+    def get_success_url(self):
+        return reverse('products_list')
+
+
+class DeleteProductView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['shop.delete_product']
+
+    model = Product
+    fields = '__all__'
+    template_name = 'shop/delete_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('products_list')
 
 
 class AddCommentView(LoginRequiredMixin, View):
@@ -137,6 +181,16 @@ class OrderListView(LoginRequiredMixin, ListView):
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'shop/order_detail.html'
+
+class DeleteOrderView(PermissionRequiredMixin, DeleteView):
+    permission_required = ['shop.delete_order']
+
+    model = Order
+    fields = '__all__'
+    template_name = 'shop/delete_form.html'
+
+    def get_success_url(self):
+        return reverse_lazy('order_list')
 
 
 class ProductSearchView(ListView):

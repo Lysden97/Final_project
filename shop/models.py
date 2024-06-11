@@ -39,7 +39,6 @@ class Product(models.Model):
         return f'{self.name} {self.brand} {self.price} {self.for_whom, 'Unknown'} {self.description}'
 
 
-
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

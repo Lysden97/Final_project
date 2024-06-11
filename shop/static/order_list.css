@@ -36,3 +36,15 @@
 .orders-table tbody td a:hover {
     text-decoration: underline;
 }
+.delete-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background-color: #c82333;
+}
