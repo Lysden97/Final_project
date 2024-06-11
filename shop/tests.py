@@ -1,4 +1,5 @@
 import pytest
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import Client
 from django.urls import reverse
 from pytest_django.asserts import assertTemplateUsed
@@ -452,3 +453,19 @@ def test_delete_order_post(superuser, create_order):
     assert response.status_code == 302
     assert response.url == reverse('order_list')
     assert not Order.objects.filter(pk=create_order.pk).exists()
+
+
+@pytest.mark.django_db
+def test_delete_product_from_cart(user, create_product, cart):
+    cart_product = CartProduct.objects.create(product=create_product, cart=cart, quantity=2)
+    url = reverse('delete_from_cart', args=(create_product.pk,))
+    client = Client()
+    client.force_login(user)
+    response = client.post(url)
+    assert response.status_code == 302
+    assert response.url == reverse('cart')
+    updated_cart_product = CartProduct.objects.filter(product=create_product, cart=cart).first()
+    if cart_product.quantity == 1:
+        assert updated_cart_product is None
+    else:
+        assert updated_cart_product.quantity == cart_product.quantity - 1

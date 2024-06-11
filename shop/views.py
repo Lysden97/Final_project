@@ -22,6 +22,7 @@ class BrandsListView(ListView):
     template_name = 'shop/brand_list.html'
     context_object_name = 'brands'
 
+
 class UpdateBrandView(PermissionRequiredMixin, UpdateView):
     permission_required = ['shop.update_brand']
 
@@ -158,6 +159,22 @@ class ShowCartView(LoginRequiredMixin, View):
         return render(request, 'shop/cart.html', {'cart': cart})
 
 
+class DeleteProductFromCartView(LoginRequiredMixin, View):
+    def post(self, request, product_pk):
+        product = Product.objects.get(pk=product_pk)
+        cart = Cart.objects.get(user=request.user)
+        try:
+            cartItem = CartProduct.objects.get(product=product, cart=cart)
+            if cartItem.quantity == 1:
+                cartItem.delete()
+            else:
+                cartItem.quantity -= 1
+                cartItem.save()
+        except CartProduct.DoesNotExist:
+            pass
+        return redirect('cart')
+
+
 class CreateOrderView(LoginRequiredMixin, View):
     def post(self, request):
         cart, created = Cart.objects.get_or_create(user=request.user)
@@ -171,6 +188,7 @@ class CreateOrderView(LoginRequiredMixin, View):
         cart.cartproduct_set.all().delete()
         return redirect('order_list')
 
+
 class OrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'shop/order_list.html'
@@ -178,9 +196,11 @@ class OrderListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user)
 
+
 class OrderDetailView(LoginRequiredMixin, DetailView):
     model = Order
     template_name = 'shop/order_detail.html'
+
 
 class DeleteOrderView(PermissionRequiredMixin, DeleteView):
     permission_required = ['shop.delete_order']
@@ -206,6 +226,7 @@ class ProductSearchView(ListView):
         else:
             return Product.objects.none()
 
+
 class BaseView(View):
     def get(self, request):
-        return render(request,'base.html')
+        return render(request, 'base.html')
