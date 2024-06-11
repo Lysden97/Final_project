@@ -30,7 +30,7 @@ class Product(models.Model):
     description = models.TextField()
 
     def get_absolute_url(self):
-        return reverse('detail_product', args= (self.pk,))
+        return reverse('detail_product', args=(self.pk,))
 
     def get_price(self):
         return f"{self.price:.2f}"

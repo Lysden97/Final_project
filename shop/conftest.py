@@ -67,4 +67,3 @@ def create_product(brand):
         name='Laptop', brand=brand, price=1000,
         for_whom=1, description='A high-quality laptop'
     )
-
