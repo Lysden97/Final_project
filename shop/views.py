@@ -152,6 +152,16 @@ class AddProductToCartView(LoginRequiredMixin, View):
             cart.products.add(product)
         return redirect('products_list')
 
+    def get(self, request, product_pk):
+        if not request.user.is_authenticated:
+            request.session['next_url'] = request.path
+            return redirect('login')
+        next_url = request.session.pop('next_url', None)
+        if next_url:
+            return redirect(next_url)
+        else:
+            return redirect('products_list')
+
 
 class ShowCartView(LoginRequiredMixin, View):
     def get(self, request):
